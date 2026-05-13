@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>여행 준비물 체크리스트</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #2d3748;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    padding: 32px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 4px;
+  }
+
+  header .subtitle {
+    font-size: 13px;
+    color: #718096;
+  }
+
+  .progress-card {
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+  }
+
+  .progress-percent {
+    color: #667eea;
+    font-weight: 700;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a0aec0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .preset-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .preset-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+    background: #f7faff;
+  }
+
+  .preset-btn:active { transform: scale(0.97); }
+
+  .input-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .input-row input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-row input[type="text"]:focus { border-color: #667eea; }
+
+  .input-row select {
+    padding: 12px 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    color: #4a5568;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .input-row select:focus { border-color: #667eea; }
+
+  .input-row button {
+    padding: 12px 18px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .input-row button:hover { background: #5a67d8; }
+  .input-row button:active { transform: scale(0.96); }
+
+  .clear-row {
+    text-align: right;
+    margin-bottom: 14px;
+  }
+
+  .clear-btn {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: #a0aec0;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .clear-btn:hover { color: #e53e3e; }
+
+  .groups {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 4px;
+    margin-bottom: 4px;
+  }
+
+  .group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+  }
+
+  .group-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .group-count {
+    font-size: 12px;
+    color: #a0aec0;
+    font-weight: 500;
+  }
+
+  .list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: #f7fafc;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+
+  .item:hover { background: #edf2f7; }
+
+  .item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+    flex-shrink: 0;
+  }
+
+  .item-text {
+    flex: 1;
+    font-size: 15px;
+    color: #2d3748;
+    word-break: break-word;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+
+  .item-text:hover {
+    background: rgba(102, 126, 234, 0.08);
+  }
+
+  .item.done .item-text {
+    text-decoration: line-through;
+    color: #a0aec0;
+  }
+
+  .item .edit-input {
+    flex: 1;
+    font-size: 15px;
+    padding: 4px 8px;
+    border: 2px solid #667eea;
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    background: #fff;
+  }
+
+  .item .delete {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: #cbd5e0;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .item .delete:hover {
+    background: #fed7d7;
+    color: #e53e3e;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 32px 16px;
+    color: #a0aec0;
+    font-size: 14px;
+    background: #f7fafc;
+    border-radius: 12px;
+  }
+
+  .hint {
+    font-size: 11px;
+    color: #a0aec0;
+    text-align: center;
+    margin-top: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>여행 준비물</h1>
+      <p class="subtitle">빠뜨린 거 없이 챙겨봐요</p>
+    </header>
+
+    <div class="progress-card">
+      <div class="progress-text">
+        <span id="progress-label">0개 중 0개 완료</span>
+        <span class="progress-percent" id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="section-label">템플릿 불러오기</div>
+    <div class="preset-row" id="preset-row"></div>
+
+    <div class="section-label">항목 추가</div>
+    <form class="input-row" id="add-form">
+      <input
+        type="text"
+        id="item-input"
+        placeholder="예: 여권, 충전기, 세면도구"
+        autocomplete="off"
+        maxlength="50"
+      />
+      <select id="category-select"></select>
+      <button type="submit">추가</button>
+    </form>
+
+    <div class="clear-row">
+      <button type="button" class="clear-btn" id="clear-btn">전체 비우기</button>
+    </div>
+
+    <div class="groups" id="groups"></div>
+
+    <p class="hint">항목 텍스트를 클릭하면 수정할 수 있어요</p>
+  </div>
+
+  <script>
+    const CATEGORIES = [
+      { key: 'documents',  label: '서류',     color: '#f6ad55' },
+      { key: 'electronics',label: '전자기기', color: '#4299e1' },
+      { key: 'clothing',   label: '의류',     color: '#48bb78' },
+      { key: 'toiletries', label: '세면도구', color: '#9f7aea' },
+      { key: 'other',      label: '기타',     color: '#a0aec0' },
+    ];
+
+    const PRESETS = {
+      overseas: {
+        label: '해외여행',
+        items: [
+          ['여권', 'documents'],
+          ['항공권 / E-티켓', 'documents'],
+          ['비자', 'documents'],
+          ['여행자보험 증서', 'documents'],
+          ['환전한 현금', 'documents'],
+          ['신용카드', 'documents'],
+          ['휴대폰 충전기', 'electronics'],
+          ['보조배터리', 'electronics'],
+          ['해외용 어댑터', 'electronics'],
+          ['이어폰', 'electronics'],
+          ['속옷', 'clothing'],
+          ['양말', 'clothing'],
+          ['상의', 'clothing'],
+          ['하의', 'clothing'],
+          ['잠옷', 'clothing'],
+          ['겉옷', 'clothing'],
+          ['칫솔 / 치약', 'toiletries'],
+          ['샴푸 / 린스', 'toiletries'],
+          ['폼클렌징', 'toiletries'],
+          ['스킨 / 로션', 'toiletries'],
+        ],
+      },
+      domestic: {
+        label: '국내여행',
+        items: [
+          ['신분증', 'documents'],
+          ['교통카드', 'documents'],
+          ['신용카드', 'documents'],
+          ['휴대폰 충전기', 'electronics'],
+          ['보조배터리', 'electronics'],
+          ['속옷', 'clothing'],
+          ['양말', 'clothing'],
+          ['상의', 'clothing'],
+          ['하의', 'clothing'],
+          ['칫솔 / 치약', 'toiletries'],
+          ['세안용품', 'toiletries'],
+        ],
+      },
+      camping: {
+        label: '캠핑',
+        items: [
+          ['신분증', 'documents'],
+          ['예약 확인증', 'documents'],
+          ['헤드 랜턴', 'electronics'],
+          ['보조배터리', 'electronics'],
+          ['방한 옷', 'clothing'],
+          ['우비', 'clothing'],
+          ['등산화 / 운동화', 'clothing'],
+          ['칫솔 / 치약', 'toiletries'],
+          ['물티슈', 'toiletries'],
+          ['텐트', 'other'],
+          ['침낭', 'other'],
+          ['매트', 'other'],
+          ['버너 / 코펠', 'other'],
+          ['식기 / 수저', 'other'],
+          ['캠핑 의자 / 테이블', 'other'],
+        ],
+      },
+      business: {
+        label: '출장',
+        items: [
+          ['신분증', 'documents'],
+          ['명함', 'documents'],
+          ['출장 서류', 'documents'],
+          ['노트북', 'electronics'],
+          ['노트북 충전기', 'electronics'],
+          ['마우스', 'electronics'],
+          ['휴대폰 충전기', 'electronics'],
+          ['정장', 'clothing'],
+          ['와이셔츠', 'clothing'],
+          ['넥타이', 'clothing'],
+          ['구두', 'clothing'],
+          ['면도기', 'toiletries'],
+          ['칫솔 / 치약', 'toiletries'],
+        ],
+      },
+    };
+
+    const items = [];
+    let nextId = 1;
+
+    const form = document.getElementById('add-form');
+    const input = document.getElementById('item-input');
+    const categorySelect = document.getElementById('category-select');
+    const presetRow = document.getElementById('preset-row');
+    const groupsEl = document.getElementById('groups');
+    const progressLabel = document.getElementById('progress-label');
+    const progressPercent = document.getElementById('progress-percent');
+    const progressFill = document.getElementById('progress-fill');
+    const clearBtn = document.getElementById('clear-btn');
+
+    // Init category dropdown
+    for (const c of CATEGORIES) {
+      const opt = document.createElement('option');
+      opt.value = c.key;
+      opt.textContent = c.label;
+      categorySelect.appendChild(opt);
+    }
+    categorySelect.value = 'other';
+
+    // Init preset buttons
+    for (const [key, preset] of Object.entries(PRESETS)) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'preset-btn';
+      btn.textContent = preset.label;
+      btn.addEventListener('click', () => loadPreset(key));
+      presetRow.appendChild(btn);
+    }
+
+    function loadPreset(key) {
+      const preset = PRESETS[key];
+      if (!preset) return;
+      if (items.length > 0) {
+        const ok = confirm(`현재 목록을 비우고 "${preset.label}" 템플릿을 불러올까요?`);
+        if (!ok) return;
+        items.length = 0;
+      }
+      for (const [text, category] of preset.items) {
+        items.push({ id: nextId++, text, category, done: false });
+      }
+      render();
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      const category = categorySelect.value || 'other';
+      items.push({ id: nextId++, text, category, done: false });
+      input.value = '';
+      render();
+      input.focus();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      if (items.length === 0) return;
+      if (confirm('모든 항목을 삭제할까요?')) {
+        items.length = 0;
+        render();
+      }
+    });
+
+    function toggle(id) {
+      const item = items.find(i => i.id === id);
+      if (item) item.done = !item.done;
+      render();
+    }
+
+    function remove(id) {
+      const idx = items.findIndex(i => i.id === id);
+      if (idx !== -1) items.splice(idx, 1);
+      render();
+    }
+
+    function startEdit(li, item) {
+      const textEl = li.querySelector('.item-text');
+      if (!textEl) return;
+
+      const editor = document.createElement('input');
+      editor.type = 'text';
+      editor.className = 'edit-input';
+      editor.value = item.text;
+      editor.maxLength = 50;
+
+      let finished = false;
+      const commit = (save) => {
+        if (finished) return;
+        finished = true;
+        if (save) {
+          const v = editor.value.trim();
+          if (v) item.text = v;
+        }
+        render();
+      };
+
+      editor.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); commit(true); }
+        else if (e.key === 'Escape') { e.preventDefault(); commit(false); }
+      });
+      editor.addEventListener('blur', () => commit(true));
+
+      textEl.replaceWith(editor);
+      editor.focus();
+      editor.select();
+    }
+
+    function render() {
+      groupsEl.innerHTML = '';
+
+      if (items.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '아직 추가된 항목이 없어요. 템플릿을 불러오거나 직접 추가해보세요.';
+        groupsEl.appendChild(empty);
+      } else {
+        for (const cat of CATEGORIES) {
+          const groupItems = items.filter(i => i.category === cat.key);
+          if (groupItems.length === 0) continue;
+
+          const groupWrap = document.createElement('div');
+
+          const header = document.createElement('div');
+          header.className = 'group-header';
+          const doneCount = groupItems.filter(i => i.done).length;
+          header.innerHTML = `
+            <div class="group-title">
+              <span class="group-dot" style="background:${cat.color}"></span>
+              <span>${cat.label}</span>
+            </div>
+            <span class="group-count">${doneCount} / ${groupItems.length}</span>
+          `;
+          groupWrap.appendChild(header);
+
+          const ul = document.createElement('ul');
+          ul.className = 'list';
+
+          for (const item of groupItems) {
+            const li = document.createElement('li');
+            li.className = 'item' + (item.done ? ' done' : '');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = item.done;
+            checkbox.addEventListener('change', () => toggle(item.id));
+
+            const span = document.createElement('span');
+            span.className = 'item-text';
+            span.textContent = item.text;
+            span.title = '클릭해서 수정';
+            span.addEventListener('click', () => startEdit(li, item));
+
+            const del = document.createElement('button');
+            del.className = 'delete';
+            del.type = 'button';
+            del.textContent = '×';
+            del.setAttribute('aria-label', '삭제');
+            del.addEventListener('click', () => remove(item.id));
+
+            li.appendChild(checkbox);
+            li.appendChild(span);
+            li.appendChild(del);
+            ul.appendChild(li);
+          }
+
+          groupWrap.appendChild(ul);
+          groupsEl.appendChild(groupWrap);
+        }
+      }
+
+      const total = items.length;
+      const done = items.filter(i => i.done).length;
+      const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+      progressLabel.textContent = `${total}개 중 ${done}개 완료`;
+      progressPercent.textContent = `${pct}%`;
+      progressFill.style.width = `${pct}%`;
+    }
+
+    render();
+  </script>
+</body>
+</html>
