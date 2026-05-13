@@ -9,13 +9,40 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background:
+      radial-gradient(ellipse at 75% 8%, rgba(255, 240, 200, 0.55) 0%, transparent 45%),
+      linear-gradient(180deg,
+        #d9eef9 0%,
+        #a7d3ec 18%,
+        #6db1d8 38%,
+        #2e6fa8 62%,
+        #194a7e 85%,
+        #0f2f55 100%);
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
     color: #2d3748;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .skyline {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+    z-index: 0;
+    filter: drop-shadow(0 -6px 14px rgba(0, 0, 0, 0.18));
+  }
+  .skyline svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   .app {
@@ -23,8 +50,10 @@
     max-width: 520px;
     background: #fff;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     padding: 32px;
+    position: relative;
+    z-index: 1;
   }
 
   header {
@@ -629,5 +658,67 @@
 
     render();
   </script>
+
+  <div class="skyline" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 140" preserveAspectRatio="xMidYMax slice">
+      <rect x="0" y="60" width="600" height="80" fill="#fffcf3"/>
+
+      <rect x="20" y="72" width="60" height="68" fill="#ffffff"/>
+      <rect x="78" y="86" width="42" height="54" fill="#f6efde"/>
+      <rect x="118" y="66" width="54" height="74" fill="#ffffff"/>
+      <rect x="170" y="80" width="42" height="60" fill="#f6efde"/>
+
+      <ellipse cx="245" cy="66" rx="34" ry="28" fill="#1f5e9e"/>
+      <rect x="211" y="66" width="68" height="74" fill="#ffffff"/>
+      <rect x="242" y="42" width="6" height="22" fill="#1f5e9e"/>
+      <rect x="236" y="48" width="18" height="3" fill="#1f5e9e"/>
+
+      <rect x="285" y="76" width="50" height="64" fill="#f6efde"/>
+      <rect x="333" y="62" width="40" height="78" fill="#ffffff"/>
+
+      <rect x="378" y="34" width="34" height="106" fill="#ffffff"/>
+      <rect x="385" y="50" width="20" height="24" fill="#1f5e9e"/>
+      <rect x="385" y="82" width="20" height="20" fill="#1f5e9e"/>
+      <rect x="392" y="14" width="6" height="20" fill="#ffffff"/>
+      <rect x="386" y="20" width="18" height="3" fill="#ffffff"/>
+
+      <ellipse cx="445" cy="72" rx="24" ry="20" fill="#266bb0"/>
+      <rect x="421" y="72" width="48" height="68" fill="#ffffff"/>
+
+      <rect x="475" y="68" width="52" height="72" fill="#f6efde"/>
+      <rect x="525" y="80" width="44" height="60" fill="#ffffff"/>
+
+      <ellipse cx="585" cy="78" rx="20" ry="16" fill="#1f5e9e"/>
+      <rect x="565" y="78" width="40" height="62" fill="#ffffff"/>
+
+      <g fill="#1f5e9e">
+        <rect x="35" y="88" width="6" height="10"/>
+        <rect x="55" y="88" width="6" height="10"/>
+        <rect x="90" y="100" width="6" height="10"/>
+        <rect x="135" y="84" width="6" height="10"/>
+        <rect x="152" y="84" width="6" height="10"/>
+        <rect x="182" y="98" width="6" height="10"/>
+        <rect x="225" y="96" width="6" height="10"/>
+        <rect x="255" y="96" width="6" height="10"/>
+        <rect x="298" y="94" width="6" height="10"/>
+        <rect x="316" y="94" width="6" height="10"/>
+        <rect x="343" y="82" width="6" height="10"/>
+        <rect x="358" y="82" width="6" height="10"/>
+        <rect x="432" y="92" width="6" height="10"/>
+        <rect x="450" y="92" width="6" height="10"/>
+        <rect x="488" y="88" width="6" height="10"/>
+        <rect x="508" y="88" width="6" height="10"/>
+        <rect x="538" y="100" width="6" height="10"/>
+        <rect x="575" y="98" width="6" height="10"/>
+      </g>
+
+      <g fill="#1f5e9e">
+        <rect x="46" y="116" width="10" height="24"/>
+        <rect x="142" y="114" width="10" height="26"/>
+        <rect x="346" y="114" width="10" height="26"/>
+        <rect x="498" y="116" width="10" height="24"/>
+      </g>
+    </svg>
+  </div>
 </body>
 </html>
